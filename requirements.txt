@@ -1,0 +1,7 @@
+langchain-mcp-adapters
+fastmcp
+scikit-learn
+pandas
+numpy
+shap
+joblib
