@@ -1,105 +1,107 @@
 # MCP Explainable ML Pipeline
 
-This repository showcases a **Machine Learning Control Plane (MCP)** with an integrated prediction model.  
-You can host the MCP server, call prediction endpoints using a LangGraph tool, and interact with the system via a modern Streamlit UI.
-
----
+This repository implements a diabetes risk prediction chatbot using a FastMCP server, LangGraph with a ReAct agent, Ollama for local LLM inference, and Streamlit for an interactive interface.
 
 ## Features
 
-- **MCP Server Hosting:** Easily launch the MCP server to serve model predictions via HTTP.
-- **Prediction Model:** Pre-trained and customizable model files for demonstrations and real-world scenarios.
-- **LangGraph Integration:** Use the LangGraph tool for orchestrated, explainable calls to the server.
-- **Streamlit UI:** User-friendly Streamlit dashboard for interactive predictions and analysis.
-- **Explainability:** Tools for generating and visualizing model explanations.
+- **Diabetes Risk Prediction**: Predicts diabetes risk based on user inputs (e.g., age, BMI, pedigree) using an ML model.
+- **FastMCP Integration**: Utilizes MultiServerMCPClient for tool-based model interaction.
+- **LangGraph**: Employs a ReAct agent for dynamic tool calling with Ollama's Qwen3:32b model.
+- **Streamlit Interface**: Offers a real-time chatbot for user queries and detailed response insights.
+- **Local Deployment**: Runs locally with privacy-focused setup.
 
----
+## Prerequisites
 
-## Directory Structure
+- Python 3.8+
+- Ollama (with Qwen3:32b model pulled)
+- Streamlit
+- LangGraph, LangChain Ollama, and FastMCP dependencies (listed in `requirements.txt`)
+- Git
+
+## Installation
+
+1. **Clone the Repository**
+
+   ```bash
+   git clone https://github.com/vikrambhat2/mcp-explainable-ml-pipeline.git
+   cd mcp-explainable-ml-pipeline
+   ```
+
+2. **Set Up Python Environment**
+
+   Create and activate a virtual environment, then install dependencies:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  
+   pip install -r requirements.txt
+   ```
+
+3. **Configure Ollama**
+
+   Pull the Qwen3:32b model and start the Ollama service:
+
+   ```bash
+   ollama pull qwen3:32b
+   ollama serve
+   ```
+
+
+## Project Structure
+
+```plaintext
+mcp-explainable-ml-pipeline/
+├── client.ipynb          # Jupyter notebook for client exploration
+├── client.py             # Streamlit-based chatbot with FastMCP integration
+├── data/                 # Data directory
+│   └── pima_diabetes.csv # Dataset for training
+├── mlenv/                # Environment or model-related files
+├── models/               # Models directory
+│   └── model.pkl         # Trained model file
+├── README.md             # This file
+├── requirements.txt      # Python dependencies
+├── server.py             # FastMCP server implementation
+├── tools/                # Tools directory
+│   ├── predict.py        # Prediction script
+│   └── train_model.py    # Model training script
 ```
-├── data/ # Sample and test datasets
-├── models/ # Serialized model artifacts (e.g., .pkl, .joblib)
-├── tools/ # Utility scripts, including LangGraph integration
-├── client.ipynb # Jupyter notebook client for experimentation
-├── client.py # Python client script to call MCP server
-├── http_server.py # Main script to launch the MCP server
-├── server.py # (Optional) Additional/alternative server implementation
-├── requirements.txt # Python dependencies
-├── README.md # Project documentation
-
-```
-
----
-
-## Getting Started
-
-1. **Clone the repository:**
-    ```
-    git clone https://github.com/vikrambhat2/mcp-explainable-ml-pipeline.git
-    cd mcp-explainable-ml-pipeline
-    ```
-
-2. **Install dependencies:**
-    ```
-    pip install -r requirements.txt
-    ```
-
-3. **Prepare your data and models:**
-    - Place datasets in the `data/` directory (update paths in code as needed).
-    - Store your trained models in the `models/` folder.
-
----
 
 ## Usage
 
-### 1. Host the MCP Server
+1. **Start the FastMCP Server**
 
-Launch the main server to serve predictions:
-python server.py
+   Run the server:
 
+   ```bash
+   python server.py
+   ```
 
+   Ensure it runs on `http://localhost:8000/mcp`.
 
-### 2. Call the MCP Server Using LangGraph
+2. **Run the Chatbot**
 
-- Use scripts in `tools/` to invoke server endpoints with the LangGraph tool for explainable inference workflows.
-- Example usage:
-    ```
-    python tools/langgraph_client.py
-    ```
+   Launch the Streamlit app:
 
-### 3. Interact via Streamlit UI
+   ```bash
+   streamlit run client.py
+   ```
 
-Start the Streamlit dashboard for easy interaction:
-streamlit run tools/streamlit_ui.py
+   Open `http://localhost:8501` in your browser.
 
-text
-Adjust the path if your Streamlit UI file is named differently.
+3. **Interact with the Chatbot**
 
-### 4. Experiment and Extend
+   - Enter queries like "Predict diabetes risk for age 45, BMI 28, pedigree 0.5".
+   - View predictions and expand "Response Details" for additional insights.
 
-- Use `client.ipynb` or `client.py` for API calls, batch predictions, or custom analysis.
-- Extend utilities in `tools/` for more explainability features or data processing.
+## Configuration
 
----
+- Edit `client.py` to update the MCP server URL or model if needed.
+- Ensure the `.env` file contains the correct API key.
 
-## Requirements
+## Contributing
 
-- Python 3.7+
-- See `requirements.txt` for packages such as:  
-  - scikit-learn, pandas, streamlit, langgraph, etc.
-
----
+Fork the repo, create a branch, commit changes, and submit a pull request.
 
 ## License
 
-This project is licensed under the MIT License.
-
----
-
-## Contact
-
-For issues, questions, or feature requests, please [open an issue](https://github.com/vikrambhat2/mcp-explainable-ml-pipeline/issues) on GitHub.
-
----
-
-*Showcase, understand, and share your machine learning predictions the explainable way!*
+MIT License. See `LICENSE` for details.
