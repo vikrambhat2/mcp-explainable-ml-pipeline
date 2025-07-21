@@ -13,7 +13,7 @@ logging.basicConfig(
 )
 
 try:
-    mcp = FastMCP("Predict Diabetes Server")
+    mcp = FastMCP("Predict Diabetes MCP Server")
 except Exception as e:
     logging.error(f"Failed to initialize FastMCP: {e}")
     raise

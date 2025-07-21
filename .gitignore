@@ -3,3 +3,4 @@ tools/__pycache__/*
 .env
 Dockerfile
 .DS_Store
+server.py
