@@ -122,6 +122,4 @@ The Streamlit-based chatbot (client.py) demonstrates real-time MCP tool calling.
 
 Fork the repo, create a branch, commit changes, and submit a pull request.
 
-## License
 
-MIT License. See `LICENSE` for details.
