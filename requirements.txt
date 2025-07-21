@@ -1,7 +1,9 @@
-langchain-mcp-adapters
-fastmcp
-scikit-learn
+fastapi
 pandas
-numpy
-shap
+scikit-learn
 joblib
+streamlit
+langgraph
+langchain-grok
+langchain_mcp_adapters
+python-dotenv
