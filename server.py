@@ -2,7 +2,7 @@ import os
 import logging
 from typing import Dict, Any
 from fastmcp import FastMCP
-from predict import predict_diabetes_risk
+from tools.predict import predict_diabetes_risk
 import json 
 
 # Setup logging
@@ -13,7 +13,7 @@ logging.basicConfig(
 )
 
 try:
-    mcp = FastMCP("Predict Diabetes MCP Server")
+    mcp = FastMCP("Predict Diabetes Server", host="0.0.0.0", port=8000)
 except Exception as e:
     logging.error(f"Failed to initialize FastMCP: {e}")
     raise
@@ -97,7 +97,7 @@ def get_model_information() -> str:
 if __name__ == "__main__":
     try:
         logging.info("Launching MCP server with Diabetes prediction Tool...")
-        mcp.run()
+        mcp.run("streamable-http")
     except Exception as e:
         logging.error(f"Failed to run MCP server: {e}")
         raise

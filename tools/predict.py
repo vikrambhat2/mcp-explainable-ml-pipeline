@@ -2,7 +2,7 @@ import joblib
 import numpy as np
 
 # Load the trained model from disk once at import
-model = joblib.load("/Users/vikrambhat/Documents/mcp-explainable-ml-pipeline/model.pkl")
+model = joblib.load("models/model.pkl")
 
 
 def predict_diabetes_risk(age: float, bmi: float, diabetes_pedigree_function: float) -> dict:
