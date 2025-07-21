@@ -55,7 +55,6 @@ mcp-explainable-ml-pipeline/
 ├── client.py             # Streamlit-based chatbot with FastMCP integration
 ├── data/                 # Data directory
 │   └── pima_diabetes.csv # Dataset for training
-├── mlenv/                # Environment or model-related files
 ├── models/               # Models directory
 │   └── model.pkl         # Trained model file
 ├── README.md             # This file
@@ -96,7 +95,29 @@ mcp-explainable-ml-pipeline/
 ## Configuration
 
 - Edit `client.py` to update the MCP server URL or model if needed.
-- Ensure the `.env` file contains the correct API key.
+
+## Tool Calling Demonstrations
+
+#### Claude Desktop: 
+The MCP tool can be invoked via the Claude desktop application, showcasing seamless integration with the FastMCP server. This allows for testing tool calls in a controlled environment, with responses reflecting the diabetes risk prediction model.
+
+
+<br>
+<img width="1992" height="1596" alt="image" src="https://github.com/user-attachments/assets/cd367d43-bd3f-4565-b0d7-b82789fa49ee" />
+
+
+
+<br>
+
+#### Streamlit Chat App: 
+The Streamlit-based chatbot (client.py) demonstrates real-time MCP tool calling. Users can input queries (e.g., "Predict diabetes risk for age 45, BMI 28, pedigree 0.5") and receive predictions with detailed insights, accessible via the app at http://localhost:8501.
+
+
+<img width="3414" height="1874" alt="image" src="https://github.com/user-attachments/assets/738314fb-3433-479d-aa08-a128eade8878" />
+
+
+
+
 
 ## Contributing
 
