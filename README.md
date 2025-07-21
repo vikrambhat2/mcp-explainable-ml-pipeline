@@ -16,7 +16,6 @@ This repository implements a diabetes risk prediction chatbot using a FastMCP se
 - Ollama (with Qwen3:32b model pulled)
 - Streamlit
 - LangGraph, LangChain Ollama, and FastMCP dependencies (listed in `requirements.txt`)
-- Git
 
 ## Installation
 
