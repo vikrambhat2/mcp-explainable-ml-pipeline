@@ -2,7 +2,7 @@ import streamlit as st
 import asyncio
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langgraph.prebuilt import ToolNode
-from langchain_groq import ChatGroq
+from langchain_ollama import ChatOllama
 from langchain_mcp_adapters.client import MultiServerMCPClient
 import os
 from dotenv import load_dotenv
@@ -36,11 +36,8 @@ if "graph" not in st.session_state:
         #st.write("Loaded resources:", resources)
 
         # Load model and bind tools
-        llm = ChatGroq(
-            model_name="qwen/qwen3-32b",  #llama-3.3-70b-versatile
-            temperature=0,
-            api_key=os.getenv("GROQ_API_KEY") 
-        )
+        
+        llm = ChatOllama(model="qwen3:32b")
         model_with_tools = llm.bind_tools(mcp_tools)
 
         # LangGraph step functions
