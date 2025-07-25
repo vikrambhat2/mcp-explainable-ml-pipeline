@@ -3,6 +3,7 @@ import logging
 from typing import Dict, Any
 from fastmcp import FastMCP
 from tools.predict import predict_diabetes_risk
+from tools.explain import explain_diabetes_risk
 import json 
 
 # Setup logging
@@ -13,18 +14,78 @@ logging.basicConfig(
 )
 
 try:
-    mcp = FastMCP("Predict Diabetes Server", host="0.0.0.0", port=8000)
+    mcp = FastMCP("Predict Diabetes Server", host="0.0.0.0", port=8080)
 except Exception as e:
     logging.error(f"Failed to initialize FastMCP: {e}")
     raise
 
 @mcp.tool()
-def diabetes_risk_predictor(age: float, bmi: float, diabetes_pedigree_function: float) -> dict:
-    """Predict diabetes risk based on age, BMI, and diabetes pedigree function.
-    
-    Returns a dictionary with prediction (0 or 1) and probability (0-1).
+def diabetes_risk_explainer(age: float, bmi: float, diabetes_pedigree_function: float) -> dict:
     """
-    return predict_diabetes_risk(age, bmi, diabetes_pedigree_function)
+    Generates a SHAP-based explanation for the diabetes risk prediction.
+
+    This tool returns the contribution of each input feature (age, BMI, and diabetes pedigree function)
+    to the model’s prediction. It uses SHAP values to quantify how much each feature pushes the prediction
+    toward or away from diabetes (class 1) versus no diabetes (class 0).
+
+    Args:
+        age (float): Age of the individual.
+        bmi (float): Body Mass Index.
+        diabetes_pedigree_function (float): A measure indicating hereditary diabetes risk.
+
+    Returns:
+        dict: A dictionary mapping each feature to a list of two SHAP values:
+              [contribution to class 0 (no diabetes), contribution to class 1 (diabetes)].
+              Higher positive SHAP values for class 1 indicate stronger influence toward predicting diabetes.
+    """
+    try:
+        explain_diabetes_risk(age, bmi, diabetes_pedigree_function)
+        return explain_diabetes_risk(age, bmi, diabetes_pedigree_function)
+    except IndexError:
+        # Fallback explanation in case SHAP output is not shaped as expected
+        logging.warning("SHAP explanation failed due to unexpected output shape")
+        return {
+            "explanation": {
+                "age": "Not available",
+                "bmi": "Not available",
+                "diabetes_pedigree_function": "Not available"
+            },
+            "note": "Explanation not available due to model output shape issue"
+        }
+    except Exception as e:
+        logging.error(f"Error during explanation: {e}")
+        return {
+            "error": "Failed to generate explanation",
+            "details": str(e)
+        }
+
+
+@mcp.tool()
+def diabetes_risk_predictor(age: float, bmi: float, diabetes_pedigree_function: float) -> dict:
+    """
+    Predicts diabetes risk and explains feature contributions using SHAP.
+
+    Args:
+        age (float): Age of the individual in years.
+        bmi (float): Body Mass Index (kg/m^2).
+        diabetes_pedigree_function (float): Family history score.
+
+    Returns:
+        dict: {
+            'prediction': 0 or 1 (diabetes risk),
+            'probability': float (0–1),
+            'explanation': dict of feature-wise SHAP values showing contribution to the prediction.
+        }
+
+    Notes:
+        - SHAP values indicate the contribution of each feature to the model’s decision. They are not percentages.
+        - LLMs or client apps must use these SHAP values for explanation — do not hallucinate.
+    """
+    result = predict_diabetes_risk(age, bmi, diabetes_pedigree_function)
+    if result['prediction']==1:
+        explain = explain_diabetes_risk(age, bmi, diabetes_pedigree_function)
+        result.update(explain)
+    return result
 
 
 @mcp.resource("diabetes://guidelines/risk-factors")
